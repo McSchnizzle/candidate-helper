@@ -1,0 +1,927 @@
+openapi: 3.0.3
+info:
+  title: Cindy from Cinder - AI Interview Coach API
+  description: REST API for AI interview practice sessions, coaching feedback, and job matching
+  version: 1.0.0
+  contact:
+    name: Cinder Team
+    email: recruiting@teamcinder.com
+
+servers:
+  - url: https://teamcinder.com/api
+    description: Production
+  - url: http://localhost:3000/api
+    description: Local development
+
+security:
+  - supabaseAuth: []
+
+tags:
+  - name: Sessions
+    description: Interview practice session management
+  - name: Answers
+    description: Question answer submission and transcription
+  - name: Reports
+    description: Coaching feedback reports
+  - name: Uploads
+    description: Resume and JD file uploads
+  - name: Jobs
+    description: Job matching and digest
+  - name: Admin
+    description: Admin dashboard and analytics (requires admin role)
+
+paths:
+  /sessions:
+    post:
+      tags: [Sessions]
+      summary: Create a new practice session
+      description: |
+        Creates a new interview practice session (guest or registered).
+        For registered users, generates tailored questions from uploaded resume/JD.
+        For guest users, provides generic soft-skill questions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mode, questionCount]
+              properties:
+                mode:
+                  type: string
+                  enum: [audio, text]
+                  description: Recording mode (audio only for registered users)
+                lowAnxietyEnabled:
+                  type: boolean
+                  default: false
+                  description: Enable Low-Anxiety Mode (3 questions, no follow-ups)
+                perQuestionCoaching:
+                  type: boolean
+                  default: false
+                  description: Show coaching after each question instead of end-of-session
+                questionCount:
+                  type: integer
+                  minimum: 3
+                  maximum: 10
+                  default: 8
+                  description: Number of questions (forced to 3 if lowAnxietyEnabled)
+                jobDescriptionText:
+                  type: string
+                  nullable: true
+                  description: Pasted/uploaded JD content (for tailored questions)
+                targetRoleOverride:
+                  type: string
+                  nullable: true
+                  description: Desired role if no JD provided
+      responses:
+        '201':
+          description: Session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+
+  /sessions/{sessionId}:
+    get:
+      tags: [Sessions]
+      summary: Get session details
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionWithQuestions'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Sessions]
+      summary: Update session (mark complete, save draft)
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completedAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                draftSave:
+                  type: object
+                  nullable: true
+                  description: In-progress session state for recovery
+      responses:
+        '200':
+          description: Session updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /sessions/{sessionId}/questions:
+    post:
+      tags: [Sessions]
+      summary: Generate tailored questions for session
+      description: |
+        Generates interview questions based on user's resume and JD.
+        Uses OpenAI to create tailored behavioral and technical questions.
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '201':
+          description: Questions generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  questions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /sessions/{sessionId}/coaching:
+    post:
+      tags: [Sessions]
+      summary: Generate coaching feedback
+      description: |
+        Analyzes user answers and generates STAR-framework coaching.
+        Creates narrative feedback, rubric tags, and example improved answers.
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                perQuestion:
+                  type: boolean
+                  default: false
+                  description: Generate per-question coaching (vs end-of-session)
+      responses:
+        '201':
+          description: Coaching generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoachingResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /answers:
+    post:
+      tags: [Answers]
+      summary: Submit answer to a question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sessionId, questionId, transcriptText]
+              properties:
+                sessionId:
+                  type: string
+                  format: uuid
+                questionId:
+                  type: string
+                  format: uuid
+                transcriptText:
+                  type: string
+                  description: User's answer text (from typing or transcription)
+                durationSeconds:
+                  type: integer
+                  nullable: true
+                  minimum: 1
+                  maximum: 210
+                  description: Audio recording duration (NULL for text answers)
+                retakeUsed:
+                  type: boolean
+                  default: false
+                extensionUsed:
+                  type: boolean
+                  default: false
+      responses:
+        '201':
+          description: Answer submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /answers/{answerId}/transcribe:
+    post:
+      tags: [Answers]
+      summary: Transcribe audio answer via Whisper
+      description: |
+        Accepts audio blob (webm format) and returns transcript via OpenAI Whisper.
+        For real-time partials, send chunks every 1-2 seconds.
+      parameters:
+        - name: answerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                  description: Audio blob in webm format
+                partial:
+                  type: boolean
+                  default: false
+                  description: TRUE for incremental transcription, FALSE for final
+      responses:
+        '200':
+          description: Transcription complete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transcriptText:
+                    type: string
+                  partial:
+                    type: boolean
+        '413':
+          description: Audio file too large
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reports/{sessionId}:
+    get:
+      tags: [Reports]
+      summary: Get coaching report for session
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Coaching report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /reports/{sessionId}/pdf:
+    get:
+      tags: [Reports]
+      summary: Download coaching report as PDF
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: PDF file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /uploads/resume:
+    post:
+      tags: [Uploads]
+      summary: Upload resume file
+      description: |
+        Uploads resume (PDF/DOCX/TXT/MD), scans for viruses via ClamAV,
+        parses for structured data via OpenAI, detects/strips SSN and DOB.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Resume file (max 3MB, accepted formats PDF/DOCX/TXT/MD)
+      responses:
+        '201':
+          description: Resume uploaded and parsed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resumeStoragePath:
+                    type: string
+                    description: Supabase Storage path
+                  parsedData:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      phone:
+                        type: string
+                      location:
+                        type: string
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                      experience:
+                        type: array
+                        items:
+                          type: object
+                      education:
+                        type: array
+                        items:
+                          type: object
+                  piiDetected:
+                    type: object
+                    properties:
+                      ssnFound:
+                        type: boolean
+                      dobFound:
+                        type: boolean
+        '400':
+          description: Invalid file format or size exceeds 3MB
+        '403':
+          description: Virus detected in file
+        '413':
+          description: File too large
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /uploads/jd:
+    post:
+      tags: [Uploads]
+      summary: Upload job description
+      description: Accepts JD as file or text paste
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  nullable: true
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  nullable: true
+      responses:
+        '201':
+          description: JD uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jdText:
+                    type: string
+
+  /jobs/match:
+    post:
+      tags: [Jobs]
+      summary: Calculate job match scores for user
+      description: |
+        Runs matching algorithm (hard skills 50%, soft skills 20%, seniority 20%, logistics 10%).
+        Enforces must-have skills gate.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: User ID (if NULL, uses current authenticated user)
+      responses:
+        '200':
+          description: Match scores calculated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/JobMatch'
+
+  /jobs/digest:
+    post:
+      tags: [Jobs]
+      summary: Send daily job digest (cron endpoint)
+      description: |
+        Cron job endpoint called daily at 5:00 PM PT.
+        Sends digest emails to users with digest_opt_in = TRUE.
+      security:
+        - cronSecret: []
+      responses:
+        '200':
+          description: Digests sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emailsSent:
+                    type: integer
+                  recruitingAlertsSent:
+                    type: integer
+
+  /admin/sessions:
+    get:
+      tags: [Admin]
+      summary: Get session summaries for admin dashboard
+      security:
+        - supabaseAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Session summaries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SessionSummary'
+                  totalSessions:
+                    type: integer
+                  completionRate:
+                    type: number
+                    format: float
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /admin/analytics:
+    get:
+      tags: [Admin]
+      summary: Get dashboard metrics
+      security:
+        - supabaseAuth: []
+      responses:
+        '200':
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsDashboard'
+
+  /admin/transcripts/{sessionId}:
+    get:
+      tags: [Admin]
+      summary: Get session transcripts (recruiter access)
+      description: |
+        Allows recruiters to view transcripts if user opted in OR
+        meets performance threshold (avg STAR ≥4.2, completion rate ≥70%).
+      security:
+        - supabaseAuth: []
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Session transcripts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session:
+                    $ref: '#/components/schemas/Session'
+                  answers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Answer'
+                  accessReason:
+                    type: string
+                    enum: [user_opted_in, performance_threshold]
+        '403':
+          description: User has not granted access
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    supabaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token from auth.session.access_token
+    cronSecret:
+      type: http
+      scheme: bearer
+      description: Vercel cron secret for scheduled jobs
+
+  parameters:
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+          nullable: true
+        mode:
+          type: string
+          enum: [audio, text]
+        lowAnxietyEnabled:
+          type: boolean
+        perQuestionCoaching:
+          type: boolean
+        jobDescriptionText:
+          type: string
+          nullable: true
+        targetRoleOverride:
+          type: string
+          nullable: true
+        questionCount:
+          type: integer
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        avgStarScore:
+          type: number
+          format: float
+          nullable: true
+        completionRate:
+          type: number
+          format: float
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    SessionWithQuestions:
+      allOf:
+        - $ref: '#/components/schemas/Session'
+        - type: object
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: '#/components/schemas/Question'
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sessionId:
+          type: string
+          format: uuid
+        questionOrder:
+          type: integer
+        questionText:
+          type: string
+        category:
+          type: string
+        isTailored:
+          type: boolean
+        followUpQuestion:
+          type: string
+          nullable: true
+        followUpUsed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    Answer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sessionId:
+          type: string
+          format: uuid
+        questionId:
+          type: string
+          format: uuid
+        transcriptText:
+          type: string
+        durationSeconds:
+          type: integer
+          nullable: true
+        retakeUsed:
+          type: boolean
+        extensionUsed:
+          type: boolean
+        starSituationScore:
+          type: integer
+          nullable: true
+        starTaskScore:
+          type: integer
+          nullable: true
+        starActionScore:
+          type: integer
+          nullable: true
+        starResultScore:
+          type: integer
+          nullable: true
+        specificityTag:
+          type: string
+          nullable: true
+        impactTag:
+          type: string
+          nullable: true
+        clarityTag:
+          type: string
+          nullable: true
+        honestyFlag:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sessionId:
+          type: string
+          format: uuid
+        strengths:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              evidence:
+                type: string
+        clarifications:
+          type: array
+          items:
+            type: object
+            properties:
+              suggestion:
+                type: string
+              rationale:
+                type: string
+        perQuestionFeedback:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: string
+                format: uuid
+              narrative:
+                type: string
+              exampleAnswer:
+                type: string
+        pdfStoragePath:
+          type: string
+          nullable: true
+        pdfGeneratedAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    CoachingResponse:
+      type: object
+      properties:
+        reportId:
+          type: string
+          format: uuid
+        feedback:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: string
+                format: uuid
+              narrative:
+                type: string
+              rubricTags:
+                type: object
+              exampleAnswer:
+                type: string
+
+    JobMatch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        jobId:
+          type: string
+          format: uuid
+        matchScore:
+          type: integer
+        matchReasons:
+          type: array
+          items:
+            type: string
+        job:
+          type: object
+          properties:
+            title:
+              type: string
+            company:
+              type: string
+            location:
+              type: string
+            postingUrl:
+              type: string
+
+    SessionSummary:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+          nullable: true
+        mode:
+          type: string
+        questionCount:
+          type: integer
+        avgStarScore:
+          type: number
+          format: float
+        completionRate:
+          type: number
+          format: float
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    AnalyticsDashboard:
+      type: object
+      properties:
+        totalSessions:
+          type: integer
+        completedSessions:
+          type: integer
+        averageCompletionRate:
+          type: number
+          format: float
+        surveySubmissions:
+          type: integer
+        referralClicks:
+          type: integer
+        digestOptIns:
+          type: integer
+        currentMonthCost:
+          type: number
+          format: float
+        costBreakdown:
+          type: object
+          properties:
+            gpt4:
+              type: number
+            whisper:
+              type: number
+            tts:
+              type: number
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: object
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized
+
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Forbidden
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not found
+
+    RateLimit:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Too many requests
+              retryAfter:
+                type: integer
+                description: Seconds to wait before retrying
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Internal server error
