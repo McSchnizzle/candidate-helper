@@ -24,22 +24,22 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Next.js 14 project with TypeScript and App Router
-- [ ] T002 Install core dependencies: react@18, next@14, typescript@5
-- [ ] T003 [P] Install Supabase client: @supabase/supabase-js, @supabase/auth-helpers-nextjs
-- [ ] T004 [P] Install OpenAI SDK: openai@latest
-- [ ] T005 [P] Install Microsoft Graph SDK: @microsoft/microsoft-graph-client
-- [ ] T006 [P] Install UI dependencies: @radix-ui/react-*, tailwindcss, class-variance-authority
-- [ ] T007 [P] Install form dependencies: react-hook-form, zod, @hookform/resolvers
-- [ ] T008 [P] Install PDF generation: pdf-lib
-- [ ] T009 [P] Install dev dependencies: jest, @testing-library/react, playwright, msw, eslint, prettier
-- [ ] T010 Configure TailwindCSS with Radix UI color palette in tailwind.config.ts
-- [ ] T011 [P] Configure TypeScript with strict mode in tsconfig.json
-- [ ] T012 [P] Configure ESLint with Next.js and accessibility rules in .eslintrc.json
-- [ ] T013 [P] Configure Prettier for consistent formatting in .prettierrc
-- [ ] T014 Create environment variable template in .env.example (Supabase, OpenAI, Microsoft Graph, ClamAV, reCAPTCHA keys)
-- [ ] T015 Set up Supabase CLI and initialize local development with supabase init
-- [ ] T016 Create .gitignore with Next.js, node_modules, .env.local patterns
+- [x] T001 Initialize Next.js 14 project with TypeScript and App Router
+- [x] T002 Install core dependencies: react@18, next@14, typescript@5
+- [x] T003 [P] Install Supabase client: @supabase/supabase-js, @supabase/auth-helpers-nextjs
+- [x] T004 [P] Install OpenAI SDK: openai@latest
+- [x] T005 [P] Install Microsoft Graph SDK: @microsoft/microsoft-graph-client
+- [x] T006 [P] Install UI dependencies: @radix-ui/react-\*, tailwindcss, class-variance-authority
+- [x] T007 [P] Install form dependencies: react-hook-form, zod, @hookform/resolvers
+- [x] T008 [P] Install PDF generation: pdf-lib
+- [x] T009 [P] Install dev dependencies: jest, @testing-library/react, playwright, msw, eslint, prettier
+- [x] T010 Configure TailwindCSS with Radix UI color palette in tailwind.config.ts
+- [x] T011 [P] Configure TypeScript with strict mode in tsconfig.json
+- [x] T012 [P] Configure ESLint with Next.js and accessibility rules in .eslintrc.json
+- [x] T013 [P] Configure Prettier for consistent formatting in .prettierrc
+- [x] T014 Create environment variable template in .env.example (Supabase, OpenAI, Microsoft Graph, ClamAV, reCAPTCHA keys)
+- [x] T015 Set up Supabase CLI and initialize local development with supabase init
+- [x] T016 Create .gitignore with Next.js, node_modules, .env.local patterns
 
 ---
 
@@ -216,7 +216,7 @@
 - [ ] T121 [US4] Create POST /api/users/digest-optin route in app/api/users/digest-optin/route.ts (set digest_opt_in=TRUE, send double opt-in confirmation email with unique confirmation link, track digest_opt_in event)
 - [ ] T122 [US4] Create GET /api/users/digest-confirm route in app/api/users/digest-confirm/[token]/route.ts (verify token, set digest_confirmed=TRUE, redirect to dashboard with success message)
 - [ ] T123 [US4] Create GET /api/users/digest-unsubscribe route in app/api/users/digest-unsubscribe/[token]/route.ts (verify token, set digest_opt_in=FALSE and digest_confirmed=FALSE, show unsubscribe confirmation page)
-- [ ] T124 [US4] Configure Vercel cron jobs in vercel.json: Add cron for /api/cron/send-digests at "0 17 * * *" (5pm PT = 00:00 UTC adjusted for DST), add cron for /api/cron/curate-jobs at "0 12 * * *" (noon PT)
+- [ ] T124 [US4] Configure Vercel cron jobs in vercel.json: Add cron for /api/cron/send-digests at "0 17 \* \* _" (5pm PT = 00:00 UTC adjusted for DST), add cron for /api/cron/curate-jobs at "0 12 _ \* \*" (noon PT)
 
 **Checkpoint**: User Story 4 complete and independently testable
 
@@ -278,7 +278,7 @@
 - [ ] T148 Create degradation banner component in components/shared/DegradationBanner.tsx (display when audio mode disabled: "Audio mode temporarily unavailable due to high demand. Text mode available.")
 - [ ] T149 Add degradation banner to practice session setup page when mode forced to text
 - [ ] T150 Create monthly cost reset cron in app/api/cron/reset-audio-mode/route.ts (check if new billing period started via date_trunc('month', CURRENT_DATE), if new month set audio_mode_enabled=TRUE, clear degradation banner flag)
-- [ ] T151 Add cron job to vercel.json: /api/cron/reset-audio-mode at "0 0 1 * *" (midnight on first of month)
+- [ ] T151 Add cron job to vercel.json: /api/cron/reset-audio-mode at "0 0 1 \* \*" (midnight on first of month)
 
 ---
 
@@ -358,27 +358,33 @@
 ### Parallel Opportunities
 
 **Setup Phase (Phase 1)**:
+
 - All dependency installations (T003-T009) can run in parallel
 - Configuration tasks (T010-T013) can run in parallel after installations
 
 **Foundational Phase (Phase 2)**:
+
 - Database table definitions (T019-T030) can run in parallel
 - RLS policy creation (T034-T042) can run in parallel after RLS is enabled
 - Utility creation (T049-T065) can run in parallel
 
 **User Story Phases (Phase 3-8)**:
+
 - Once Foundational completes, all user stories can start in parallel if team capacity allows
 - Within US1: T066-T067 (public pages) can be parallel
 - Within US2: T081-T084 (auth pages) can be parallel, T088-T090 (security utilities) can be parallel
 - Within US4: T112-T114 (job matching and email utilities) can be parallel
 
 **Admin Phase (Phase 9)**:
+
 - T139-T142 (admin dashboards and routes) can run in parallel
 
 **Security Phase (Phase 10)**:
+
 - T152-T165 (all security hardening tasks) can run in parallel
 
 **Polish Phase (Phase 11)**:
+
 - T166-T180 (all polish tasks) can run in parallel
 
 ---
