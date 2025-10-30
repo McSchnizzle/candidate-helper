@@ -671,3 +671,208 @@ Running 170 tests using 5 workers
 [1A[2K✓ Cleaned up all test data
 
 [1A[2K[7/170] [chromium] › e2e/a11y.spec.ts:110:7 › Accessibility Compliance (WCAG 2.2 AA) › should have proper ARIA labels on form elements
+[1A[2K[chromium] › e2e/a11y.spec.ts:110:7 › Accessibility Compliance (WCAG 2.2 AA) › should have proper ARIA labels on form elements
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[8/170] [chromium] › e2e/a11y.spec.ts:120:7 › Accessibility Compliance (WCAG 2.2 AA) › should have proper heading hierarchy
+[1A[2K[chromium] › e2e/a11y.spec.ts:120:7 › Accessibility Compliance (WCAG 2.2 AA) › should have proper heading hierarchy
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+

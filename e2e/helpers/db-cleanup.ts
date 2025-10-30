@@ -85,17 +85,19 @@ export async function cleanupAllTestData(): Promise<void> {
     console.log("📊 Before cleanup:", beforeCounts);
 
     // Delete in reverse dependency order
-    // Use no filter to delete ALL rows (works for both UUID and integer IDs)
+    // Note: Using .delete() with no filter deletes ALL rows regardless of ID type
     const deleteResults: Record<string, { count?: number; error?: string }> = {};
 
     for (const table of tables) {
       try {
-        const { error } = await supabase.from(table).delete().neq("id", "");
+        // Using gt() with created_at column instead of ID to avoid UUID/int type issues
+        // This also respects the actual "created" time of rows
+        const { error } = await supabase.from(table).delete().lt("created_at", "2099-01-01"); // Delete everything before year 2099
         if (error) {
           console.error(`❌ Error deleting from ${table}:`, error);
           deleteResults[table] = { error: error.message };
         } else {
-          deleteResults[table] = { count: 0 }; // We deleted but don't know how many
+          deleteResults[table] = { count: 0 };
         }
       } catch (err) {
         console.error(`❌ Exception deleting from ${table}:`, err);
