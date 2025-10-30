@@ -66,7 +66,7 @@ export default function LandingPage() {
             <div className="flex items-start gap-3">
               <div className="text-primary text-2xl">✓</div>
               <div>
-                <h4 className="font-semibold mb-1">Accessible to All</h4>
+                <h3 className="font-semibold mb-1">Accessible to All</h3>
                 <p className="text-sm text-muted-foreground">
                   Text-only mode, keyboard navigation, and screen reader support ensure everyone can
                   practice.
@@ -77,7 +77,7 @@ export default function LandingPage() {
             <div className="flex items-start gap-3">
               <div className="text-primary text-2xl">✓</div>
               <div>
-                <h4 className="font-semibold mb-1">Privacy First</h4>
+                <h3 className="font-semibold mb-1">Privacy First</h3>
                 <p className="text-sm text-muted-foreground">
                   Your data is yours. We never store audio recordings, and you can export or delete
                   anytime.
@@ -88,7 +88,7 @@ export default function LandingPage() {
             <div className="flex items-start gap-3">
               <div className="text-primary text-2xl">✓</div>
               <div>
-                <h4 className="font-semibold mb-1">Evidence-Based Coaching</h4>
+                <h3 className="font-semibold mb-1">Evidence-Based Coaching</h3>
                 <p className="text-sm text-muted-foreground">
                   All feedback is based on the proven STAR framework used by top companies.
                 </p>
@@ -98,7 +98,7 @@ export default function LandingPage() {
             <div className="flex items-start gap-3">
               <div className="text-primary text-2xl">✓</div>
               <div>
-                <h4 className="font-semibold mb-1">Low-Anxiety Option</h4>
+                <h3 className="font-semibold mb-1">Low-Anxiety Option</h3>
                 <p className="text-sm text-muted-foreground">
                   Feeling nervous? Enable Low-Anxiety Mode for a gentler experience with fewer
                   questions.
