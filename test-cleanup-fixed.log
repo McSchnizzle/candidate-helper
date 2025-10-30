@@ -1,0 +1,673 @@
+
+> candidate-helper@1.0.0 test:e2e
+> playwright test
+
+
+Running 170 tests using 5 workers
+
+[1A[2K[1/170] [chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+[1A[2K[2/170] [chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+[1A[2K[3/170] [chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+[1A[2K[4/170] [chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+[1A[2K[5/170] [chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:13:7 › Accessibility Compliance (WCAG 2.2 AA) › homepage should have no accessibility violations
+📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:33:7 › Accessibility Compliance (WCAG 2.2 AA) › active session page should have no accessibility violations
+📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:47:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on homepage
+📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:58:7 › Accessibility Compliance (WCAG 2.2 AA) › should be keyboard navigable on practice setup
+📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[chromium] › e2e/a11y.spec.ts:23:7 › Accessibility Compliance (WCAG 2.2 AA) › practice setup page should have no accessibility violations
+📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[6/170] [chromium] › e2e/a11y.spec.ts:86:7 › Accessibility Compliance (WCAG 2.2 AA) › should support keyboard navigation in active session
+[1A[2K[chromium] › e2e/a11y.spec.ts:86:7 › Accessibility Compliance (WCAG 2.2 AA) › should support keyboard navigation in active session
+📊 Before cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K❌ Error deleting from audit_logs: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from events: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from matches: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from reports: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from answers: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from questions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from sessions: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from consents: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K❌ Error deleting from cost_tracking: {
+  code: [32m'22P02'[39m,
+  details: [1mnull[22m,
+  hint: [1mnull[22m,
+  message: [32m'invalid input syntax for type uuid: ""'[39m
+}
+
+[1A[2K📊 After cleanup: {
+  audit_logs: [33m0[39m,
+  events: [33m258[39m,
+  matches: [33m0[39m,
+  reports: [33m10[39m,
+  answers: [33m102[39m,
+  questions: [33m656[39m,
+  sessions: [33m146[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m231[39m
+}
+
+[1A[2K🗑️  Deleted rows: {
+  audit_logs: [33m0[39m,
+  events: [33m0[39m,
+  matches: [33m0[39m,
+  reports: [33m0[39m,
+  answers: [33m0[39m,
+  questions: [33m0[39m,
+  sessions: [33m0[39m,
+  consents: [33m0[39m,
+  cost_tracking: [33m0[39m
+}
+
+[1A[2K✓ Cleaned up all test data
+
+[1A[2K[7/170] [chromium] › e2e/a11y.spec.ts:110:7 › Accessibility Compliance (WCAG 2.2 AA) › should have proper ARIA labels on form elements

@@ -63,16 +63,67 @@ export async function cleanupAllTestData(): Promise<void> {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   try {
+    // Get before counts for verification
+    const beforeCounts: Record<string, number> = {};
+    const tables = [
+      "audit_logs",
+      "events",
+      "matches",
+      "reports",
+      "answers",
+      "questions",
+      "sessions",
+      "consents",
+      "cost_tracking",
+    ];
+
+    for (const table of tables) {
+      const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
+      beforeCounts[table] = count || 0;
+    }
+
+    console.log("📊 Before cleanup:", beforeCounts);
+
     // Delete in reverse dependency order
-    await supabase.from("audit_logs").delete().gt("id", -1);
-    await supabase.from("events").delete().gt("id", -1);
-    await supabase.from("matches").delete().gt("id", -1);
-    await supabase.from("reports").delete().gt("id", -1);
-    await supabase.from("answers").delete().gt("id", -1);
-    await supabase.from("questions").delete().gt("id", -1);
-    await supabase.from("sessions").delete().gt("id", -1);
-    await supabase.from("consents").delete().gt("id", -1);
-    await supabase.from("cost_tracking").delete().gt("id", -1);
+    // Use no filter to delete ALL rows (works for both UUID and integer IDs)
+    const deleteResults: Record<string, { count?: number; error?: string }> = {};
+
+    for (const table of tables) {
+      try {
+        const { error } = await supabase.from(table).delete().neq("id", "");
+        if (error) {
+          console.error(`❌ Error deleting from ${table}:`, error);
+          deleteResults[table] = { error: error.message };
+        } else {
+          deleteResults[table] = { count: 0 }; // We deleted but don't know how many
+        }
+      } catch (err) {
+        console.error(`❌ Exception deleting from ${table}:`, err);
+        deleteResults[table] = {
+          error: err instanceof Error ? err.message : String(err),
+        };
+      }
+    }
+
+    // Get after counts for verification
+    const afterCounts: Record<string, number> = {};
+    for (const table of tables) {
+      const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
+      afterCounts[table] = count || 0;
+    }
+
+    console.log("📊 After cleanup:", afterCounts);
+    console.log("🗑️  Deleted rows:", {
+      audit_logs: beforeCounts.audit_logs - afterCounts.audit_logs,
+      events: beforeCounts.events - afterCounts.events,
+      matches: beforeCounts.matches - afterCounts.matches,
+      reports: beforeCounts.reports - afterCounts.reports,
+      answers: beforeCounts.answers - afterCounts.answers,
+      questions: beforeCounts.questions - afterCounts.questions,
+      sessions: beforeCounts.sessions - afterCounts.sessions,
+      consents: beforeCounts.consents - afterCounts.consents,
+      cost_tracking: beforeCounts.cost_tracking - afterCounts.cost_tracking,
+    });
 
     console.log("✓ Cleaned up all test data");
   } catch (error) {
