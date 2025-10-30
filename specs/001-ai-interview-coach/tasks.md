@@ -167,13 +167,13 @@
 - [x] T093 [US2] Extend practice session setup page app/(coach)/practice/page.tsx: Add resume upload component (file input with drag-drop, show parse status), JD paste/upload component, mode selector (audio/text with text-only accessibility toggle), tailored question preferences (6 tailored + 2 soft-skills default)
 - [x] T094 [US2] Update POST /api/sessions/[id]/questions route: If user authenticated and resume uploaded, call OpenAI to generate tailored questions based on resume + JD, mix with generic soft-skills, return question mix
 - [x] T095 [US2] Create tailored question generation utility in lib/openai/questions.ts (GPT-4o prompt with resume/JD context, generate behavioral and technical questions matching user background, return array of question objects)
-- [ ] T096 [US2] Create mic test page/modal in components/coach/MicTestModal.tsx (device selector dropdown, test recording, playback, show waveform or volume indicator, mic_check_passed event)
-- [ ] T097 [US2] Create AudioRecorder component in components/coach/AudioRecorder.tsx (MediaRecorder API, 3-minute countdown timer, real-time captions via Whisper partials, retake button, +30s extension button once, stop button)
-- [ ] T098 [US2] Create Whisper transcription utility in lib/openai/stt.ts (send audio blob in webm format to OpenAI Whisper API, support partial=true for real-time and partial=false for final transcript)
-- [ ] T099 [US2] Create POST /api/answers/[id]/transcribe route in app/api/answers/[id]/transcribe/route.ts (accept audio blob multipart/form-data, call Whisper STT, return transcriptText and partial flag, insert/update answer)
-- [ ] T100 [US2] Update active session page app/(coach)/practice/session/[id]/page.tsx: Show mic test before first audio question, render AudioRecorder for audio mode or AnswerInput for text mode, display real-time captions below recorder
-- [ ] T101 [US2] Create adaptive follow-up logic in POST /api/answers route: After answer submitted, check if STAR elements missing (call OpenAI to analyze), if missing and low_anxiety_enabled=false, generate follow-up question (max 1 per question), store in questions.follow_up_question, return follow_up to frontend
-- [ ] T102 [US2] Update active session page to handle follow-up questions: If follow_up returned, show follow-up question before proceeding to next question
+- [x] T096 [US2] Create mic test page/modal in components/coach/MicTestModal.tsx (device selector dropdown, test recording, playback, show waveform or volume indicator, mic_check_passed event)
+- [x] T097 [US2] Create AudioRecorder component in components/coach/AudioRecorder.tsx (MediaRecorder API, 3-minute countdown timer, real-time captions via Whisper partials, retake button, +30s extension button once, stop button)
+- [x] T098 [US2] Create Whisper transcription utility in lib/openai/stt.ts (send audio blob in webm format to OpenAI Whisper API, support partial=true for real-time and partial=false for final transcript)
+- [x] T099 [US2] Create POST /api/answers/[id]/transcribe route in app/api/answers/[id]/transcribe/route.ts (accept audio blob multipart/form-data, call Whisper STT, return transcriptText and partial flag, insert/update answer)
+- [x] T100 [US2] Update active session page app/(coach)/practice/session/[id]/page.tsx: Show mic test before first audio question, render AudioRecorder for audio mode or AnswerInput for text mode, display real-time captions below recorder
+- [x] T101 [US2] Create adaptive follow-up logic in POST /api/answers route: After answer submitted, check if STAR elements missing (call OpenAI to analyze), if missing and low_anxiety_enabled=false, generate follow-up question (max 1 per question), store in questions.follow_up_question, return follow_up to frontend
+- [x] T102 [US2] Update active session page to handle follow-up questions: If follow_up returned, show follow-up question before proceeding to next question
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 

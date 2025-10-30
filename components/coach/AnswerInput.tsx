@@ -11,6 +11,7 @@ interface AnswerInputProps {
   totalQuestions: number;
   onSubmit: (answer: string) => void;
   isSubmitting?: boolean;
+  isFollowUp?: boolean;
 }
 
 export function AnswerInput({
@@ -19,7 +20,10 @@ export function AnswerInput({
   totalQuestions,
   onSubmit,
   isSubmitting = false,
+  isFollowUp: _isFollowUp = false,
 }: AnswerInputProps) {
+  // isFollowUp is passed but not used; the component behaves the same way
+  void _isFollowUp;
   const [answer, setAnswer] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const maxLength = 5000;

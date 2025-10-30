@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnswerInput } from "@/components/coach/AnswerInput";
+import { AudioRecorder } from "@/components/coach/AudioRecorder";
+import { MicTestModal } from "@/components/coach/MicTestModal";
 import { Button } from "@/components/ui/Button";
 
 interface Question {
@@ -10,6 +12,14 @@ interface Question {
   text: string;
   order: number;
   category: string;
+  followUpQuestion?: string;
+  followUpUsed?: boolean;
+}
+
+interface Session {
+  id: string;
+  mode: "audio" | "text";
+  lowAnxietyEnabled: boolean;
 }
 
 interface SessionPageProps {
@@ -22,30 +32,54 @@ export default function SessionPage({ params }: SessionPageProps) {
   const router = useRouter();
   const sessionId = params.id;
 
+  const [session, setSession] = useState<Session | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(new Set());
+  const [showMicTest, setShowMicTest] = useState(false);
+  const [micTestPassed, setMicTestPassed] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState("");
+  const [showFollowUp, setShowFollowUp] = useState(false);
+  const [followUpQuestion, setFollowUpQuestion] = useState<string | null>(null);
 
-  // Fetch questions on mount
+  // Fetch session and questions on mount
   useEffect(() => {
-    async function fetchQuestions() {
+    async function fetchSessionAndQuestions() {
       setIsLoading(true);
       setError(null);
 
       try {
-        const response = await fetch(`/api/sessions/${sessionId}/questions`, {
+        // Fetch session details
+        const sessionResponse = await fetch(`/api/sessions/${sessionId}`);
+        if (!sessionResponse.ok) {
+          throw new Error("Failed to fetch session details");
+        }
+        const sessionData = await sessionResponse.json();
+        setSession({
+          id: sessionData.id,
+          mode: sessionData.mode,
+          lowAnxietyEnabled: sessionData.low_anxiety_enabled,
+        });
+
+        // Show mic test if audio mode and first question
+        if (sessionData.mode === "audio" && currentQuestionIndex === 0 && !micTestPassed) {
+          setShowMicTest(true);
+        }
+
+        // Fetch questions
+        const questionsResponse = await fetch(`/api/sessions/${sessionId}/questions`, {
           method: "POST",
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
+        if (!questionsResponse.ok) {
+          const errorData = await questionsResponse.json();
           throw new Error(errorData.error || "Failed to fetch questions");
         }
 
-        const data = await response.json();
+        const data = await questionsResponse.json();
         setQuestions(data.questions || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -54,7 +88,7 @@ export default function SessionPage({ params }: SessionPageProps) {
       }
     }
 
-    fetchQuestions();
+    fetchSessionAndQuestions();
   }, [sessionId]);
 
   const handleSubmitAnswer = async (answerText: string) => {
@@ -81,20 +115,72 @@ export default function SessionPage({ params }: SessionPageProps) {
         throw new Error(errorData.error || "Failed to submit answer");
       }
 
+      const answerData = await response.json();
+
       // Mark question as answered
       const newAnswered = new Set(answeredQuestions);
       newAnswered.add(questions[currentQuestionIndex].id);
       setAnsweredQuestions(newAnswered);
 
-      // Move to next question or results page
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      // Handle follow-up question if present
+      if (answerData.followUp && !session?.lowAnxietyEnabled) {
+        setFollowUpQuestion(answerData.followUp);
+        setShowFollowUp(true);
       } else {
-        // All questions answered, navigate to results
-        router.push(`/practice/results/${sessionId}`);
+        // Move to next question or results page
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setCurrentTranscript("");
+        } else {
+          // All questions answered, navigate to results
+          router.push(`/practice/results/${sessionId}`);
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleTranscript = (text: string, isPartial: boolean) => {
+    setCurrentTranscript(text);
+    if (!isPartial) {
+      handleSubmitAnswer(text);
+    }
+  };
+
+  const handleFollowUpAnswer = async (answerText: string) => {
+    if (!followUpQuestion) return;
+
+    setIsSubmitting(true);
+    try {
+      // Submit follow-up answer
+      await fetch("/api/answers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId,
+          questionId: questions[currentQuestionIndex].id,
+          transcriptText: answerText,
+          isFollowUp: true,
+        }),
+      });
+
+      setShowFollowUp(false);
+      setFollowUpQuestion(null);
+
+      // Move to next question
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setCurrentTranscript("");
+      } else {
+        router.push(`/practice/results/${sessionId}`);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit follow-up");
     } finally {
       setIsSubmitting(false);
     }
@@ -142,12 +228,64 @@ export default function SessionPage({ params }: SessionPageProps) {
     );
   }
 
+  // Follow-up modal view
+  if (showFollowUp && followUpQuestion) {
+    return (
+      <main className="flex min-h-screen flex-col py-12 px-6">
+        <div className="w-full max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold">Follow-up Question</h1>
+            <p className="text-muted-foreground mt-2">Let's dive a bit deeper to help you shine!</p>
+          </div>
+
+          {error && (
+            <div className="mb-6 bg-destructive/10 border border-destructive/50 text-destructive rounded-lg p-4">
+              <p className="text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {session?.mode === "audio" ? (
+            <AudioRecorder
+              onTranscript={handleTranscript}
+              showCaptions={true}
+              disabled={isSubmitting}
+            />
+          ) : (
+            <AnswerInput
+              questionText={followUpQuestion}
+              questionNumber={currentQuestionIndex + 1}
+              totalQuestions={questions.length}
+              onSubmit={handleFollowUpAnswer}
+              isSubmitting={isSubmitting}
+              isFollowUp={true}
+            />
+          )}
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col py-12 px-6">
+      {/* Mic Test Modal */}
+      <MicTestModal
+        open={showMicTest && session?.mode === "audio"}
+        onClose={() => setShowMicTest(false)}
+        onMicCheckPassed={() => {
+          setMicTestPassed(true);
+          setShowMicTest(false);
+        }}
+      />
+
       {/* Header */}
       <div className="w-full max-w-4xl mx-auto mb-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Practice Session</h1>
+          <div>
+            <h1 className="text-3xl font-bold">Practice Session</h1>
+            {session?.mode === "audio" && (
+              <p className="text-sm text-muted-foreground mt-1">Audio Mode • Mic Test Required</p>
+            )}
+          </div>
           <Button
             variant="outline"
             onClick={() => {
@@ -170,14 +308,38 @@ export default function SessionPage({ params }: SessionPageProps) {
         </div>
       )}
 
-      {/* Answer Input */}
-      <AnswerInput
-        questionText={currentQuestion.text}
-        questionNumber={currentQuestionIndex + 1}
-        totalQuestions={questions.length}
-        onSubmit={handleSubmitAnswer}
-        isSubmitting={isSubmitting}
-      />
+      {/* Answer Input or Audio Recorder */}
+      {session?.mode === "audio" && micTestPassed ? (
+        <div className="w-full max-w-4xl mx-auto">
+          <div className="mb-6 rounded-lg bg-blue-50 border border-blue-200 p-4">
+            <p className="text-sm font-medium text-blue-900">{currentQuestion.text}</p>
+            <p className="text-xs text-blue-700 mt-2">
+              Question {currentQuestionIndex + 1} of {questions.length}
+            </p>
+          </div>
+
+          {currentTranscript && (
+            <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-medium text-gray-600 mb-2">Your Answer (so far):</p>
+              <p className="text-sm text-gray-800">{currentTranscript}</p>
+            </div>
+          )}
+
+          <AudioRecorder
+            onTranscript={handleTranscript}
+            showCaptions={true}
+            disabled={isSubmitting}
+          />
+        </div>
+      ) : (
+        <AnswerInput
+          questionText={currentQuestion.text}
+          questionNumber={currentQuestionIndex + 1}
+          totalQuestions={questions.length}
+          onSubmit={handleSubmitAnswer}
+          isSubmitting={isSubmitting}
+        />
+      )}
 
       {/* Navigation Hint */}
       {currentQuestionIndex > 0 && (

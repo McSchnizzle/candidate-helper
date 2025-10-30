@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { generateAdaptiveFollowUp, shouldAllowFollowUp } from "@/lib/openai/adaptive-followup";
 import { z } from "zod";
 
 // Extended validation schema for answer submission
@@ -10,6 +11,7 @@ const submitAnswerSchema = z.object({
   durationSeconds: z.number().int().min(1).max(210).optional(),
   retakeUsed: z.boolean().optional().default(false),
   extensionUsed: z.boolean().optional().default(false),
+  isFollowUp: z.boolean().optional().default(false),
 });
 
 /**
@@ -143,9 +145,57 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Generate adaptive follow-up if conditions met (T101)
+    let followUpQuestion: string | null = null;
+    if (!data.isFollowUp) {
+      try {
+        // Fetch session for context
+        const { data: sessionData } = await supabase
+          .from("sessions")
+          .select("low_anxiety_enabled, job_description_text")
+          .eq("id", data.sessionId)
+          .single();
+
+        // Fetch question text
+        const { data: questionData } = await supabase
+          .from("questions")
+          .select("question_text")
+          .eq("id", data.questionId)
+          .single();
+
+        if (questionData && sessionData) {
+          // Check if follow-up is allowed
+          if (shouldAllowFollowUp(false, sessionData.low_anxiety_enabled ?? false)) {
+            // Generate follow-up (no resume context in MVP)
+            const followUpResult = await generateAdaptiveFollowUp({
+              originalQuestion: questionData.question_text,
+              answerText: data.transcriptText,
+              jobDescriptionContext: sessionData.job_description_text || undefined,
+            });
+
+            if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
+              followUpQuestion = followUpResult.followUpQuestion;
+
+              // Store follow-up question in database
+              await supabase
+                .from("questions")
+                .update({
+                  follow_up_question: followUpQuestion,
+                })
+                .eq("id", data.questionId);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error generating follow-up:", err);
+        // Don't fail the answer submission if follow-up generation fails
+      }
+    }
+
     return NextResponse.json({
       answerId: answer.id,
       success: true,
+      followUp: followUpQuestion || undefined,
     });
   } catch (error) {
     console.error("Unexpected error in POST /api/answers:", error);
