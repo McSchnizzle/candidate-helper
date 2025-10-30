@@ -62,6 +62,8 @@ export async function cleanupStaleTestData(): Promise<void> {
 export async function cleanupAllTestData(): Promise<void> {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+
   try {
     // Get before counts for verification
     const beforeCounts: Record<string, number> = {};
@@ -90,9 +92,9 @@ export async function cleanupAllTestData(): Promise<void> {
 
     for (const table of tables) {
       try {
-        // Using gt() with created_at column instead of ID to avoid UUID/int type issues
-        // This also respects the actual "created" time of rows
-        const { error } = await supabase.from(table).delete().lt("created_at", "2099-01-01"); // Delete everything before year 2099
+        // Using created_at column to target only stale data (>1 hour old)
+        // This avoids aggressive cleanup while still removing constraint violation sources
+        const { error } = await supabase.from(table).delete().lt("created_at", oneHourAgo);
         if (error) {
           console.error(`❌ Error deleting from ${table}:`, error);
           deleteResults[table] = { error: error.message };
