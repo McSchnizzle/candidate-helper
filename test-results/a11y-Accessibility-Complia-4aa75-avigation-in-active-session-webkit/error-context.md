@@ -15,76 +15,75 @@
         - generic [ref=e12]:
             - heading "Practice Session" [level=1] [ref=e14]
             - button "Save & Exit" [ref=e15]
-        - paragraph [ref=e18]: Failed to generate questions
-        - generic [ref=e19]:
-            - generic [ref=e20]:
-                - generic [ref=e21]: Question 1 of 3
-                - generic [ref=e25]: 33%
-            - generic [ref=e26]:
-                - heading "Question 1 of 3" [level=2] [ref=e27]
-                - paragraph [ref=e28]: Can you share an example of when you went above and beyond what was expected of you?
-                - generic [ref=e29]:
-                    - 'heading "Tip: Use the STAR Framework" [level=3] [ref=e30]'
-                    - generic [ref=e31]:
-                        - generic [ref=e32]:
-                            - strong [ref=e33]: S
+        - generic [ref=e16]:
+            - generic [ref=e17]:
+                - generic [ref=e18]: Question 1 of 3
+                - generic [ref=e22]: 33%
+            - generic [ref=e23]:
+                - heading "Question 1 of 3" [level=2] [ref=e24]
+                - paragraph [ref=e25]: Can you share a time when you tried something new and it didn't work out? What was your takeaway?
+                - generic [ref=e26]:
+                    - 'heading "Tip: Use the STAR Framework" [level=3] [ref=e27]'
+                    - generic [ref=e28]:
+                        - generic [ref=e29]:
+                            - strong [ref=e30]: S
                             - text: "ituation: Set the context"
-                        - generic [ref=e34]:
-                            - strong [ref=e35]: T
+                        - generic [ref=e31]:
+                            - strong [ref=e32]: T
                             - text: "ask: Describe your responsibility"
-                        - generic [ref=e36]:
-                            - strong [ref=e37]: A
+                        - generic [ref=e33]:
+                            - strong [ref=e34]: A
                             - text: "ction: Explain what you did"
-                        - generic [ref=e38]:
-                            - strong [ref=e39]: R
+                        - generic [ref=e35]:
+                            - strong [ref=e36]: R
                             - text: "esult: Share the outcome"
-                - generic [ref=e40]:
+                - generic [ref=e37]:
                     - text: Your Answer
-                    - textbox "Your Answer" [ref=e41]:
+                    - textbox "Your Answer" [ref=e38]:
                         - /placeholder: Type your answer here... Be specific and include examples.
                         - text: This is my answer with enough characters to be valid.
-                    - generic [ref=e42]:
-                        - paragraph [ref=e43]: Great! Press Ctrl+Enter to submit
-                        - generic [ref=e44]: 53 / 5000
-                - generic [ref=e45]:
-                    - generic [ref=e46]: Take your time - there's no time limit for text mode
-                    - button "Submit Answer" [ref=e47]
-            - paragraph [ref=e49]: Need a break? Your progress is saved automatically every 30 seconds.
-    - contentinfo [ref=e50]:
-        - generic [ref=e51]:
-            - generic [ref=e52]:
+                    - generic [ref=e39]:
+                        - paragraph [ref=e40]: Great! Press Ctrl+Enter to submit
+                        - generic [ref=e41]: 53 / 5000
+                - generic [ref=e42]:
+                    - generic [ref=e43]: Take your time - there's no time limit for text mode
+                    - button "Submit Answer" [ref=e44]
+            - paragraph [ref=e46]: Need a break? Your progress is saved automatically every 30 seconds.
+    - contentinfo [ref=e47]:
+        - generic [ref=e48]:
+            - generic [ref=e49]:
+                - generic [ref=e50]:
+                    - heading "Cindy from Cinder" [level=3] [ref=e51]
+                    - paragraph [ref=e52]: AI-powered interview coaching to help you ace your next job interview.
                 - generic [ref=e53]:
-                    - heading "Cindy from Cinder" [level=3] [ref=e54]
-                    - paragraph [ref=e55]: AI-powered interview coaching to help you ace your next job interview.
-                - generic [ref=e56]:
-                    - heading "Product" [level=4] [ref=e57]
-                    - list [ref=e58]:
-                        - listitem [ref=e59]:
-                            - link "Practice Sessions" [ref=e60]:
+                    - heading "Product" [level=4] [ref=e54]
+                    - list [ref=e55]:
+                        - listitem [ref=e56]:
+                            - link "Practice Sessions" [ref=e57]:
                                 - /url: /practice
-                        - listitem [ref=e61]:
-                            - link "Features" [ref=e62]:
+                        - listitem [ref=e58]:
+                            - link "Features" [ref=e59]:
                                 - /url: /features
-                - generic [ref=e63]:
-                    - heading "Company" [level=4] [ref=e64]
-                    - list [ref=e65]:
-                        - listitem [ref=e66]:
-                            - link "About" [ref=e67]:
+                - generic [ref=e60]:
+                    - heading "Company" [level=4] [ref=e61]
+                    - list [ref=e62]:
+                        - listitem [ref=e63]:
+                            - link "About" [ref=e64]:
                                 - /url: /about
-                        - listitem [ref=e68]:
-                            - link "Cinder AI" [ref=e69]:
+                        - listitem [ref=e65]:
+                            - link "Cinder AI" [ref=e66]:
                                 - /url: https://teamcinder.com
-                - generic [ref=e70]:
-                    - heading "Legal" [level=4] [ref=e71]
-                    - list [ref=e72]:
-                        - listitem [ref=e73]:
-                            - link "Terms of Service" [ref=e74]:
+                - generic [ref=e67]:
+                    - heading "Legal" [level=4] [ref=e68]
+                    - list [ref=e69]:
+                        - listitem [ref=e70]:
+                            - link "Terms of Service" [ref=e71]:
                                 - /url: /terms
-                        - listitem [ref=e75]:
-                            - link "Privacy Policy" [ref=e76]:
+                        - listitem [ref=e72]:
+                            - link "Privacy Policy" [ref=e73]:
                                 - /url: /privacy
-            - paragraph [ref=e78]: © 2025 Cinder AI. All rights reserved.
+            - paragraph [ref=e75]: © 2025 Cinder AI. All rights reserved.
     - region "Notifications (F8)":
         - list
-    - alert [ref=e79]
+    - alert [ref=e76]
 ```

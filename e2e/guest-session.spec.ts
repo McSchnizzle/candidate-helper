@@ -76,37 +76,44 @@ test.describe("Guest Practice Session Flow", () => {
       // Submit the answer
       await submitButton.click();
 
-      // If not last question, verify we moved to next question
       // Handle potential adaptive follow-ups (same question number with different content)
-      if (i < 8) {
-        let nextQuestionFound = false;
-        let retries = 0;
+      // This applies to all questions including the last one
+      let nextQuestionFound = false;
+      let retries = 0;
+      const expectedNextQuestion = i < 8 ? `Question ${i + 1} of 8` : null; // Last question expects results page, not question 9
 
-        while (!nextQuestionFound && retries < 3) {
-          await page.waitForTimeout(300);
-          const heading = await page.locator("h2").textContent();
+      while (!nextQuestionFound && retries < 3) {
+        await page.waitForTimeout(300);
+        const heading = await page.locator("h2").textContent();
 
-          if (heading?.includes(`Question ${i + 1} of 8`)) {
-            nextQuestionFound = true;
-          } else if (heading?.includes(`Question ${i} of 8`)) {
-            // Still on same question - might be an adaptive follow-up
-            const textarea2 = page.locator("textarea");
-            if (await textarea2.isVisible()) {
-              // Submit follow-up
-              await textarea2.fill(answer);
-              const submitButton2 = page.locator('button:has-text("Submit Answer")');
-              if (await submitButton2.isEnabled()) {
-                await submitButton2.click();
-              }
-              retries++;
-            } else {
-              break;
+        if (expectedNextQuestion && heading?.includes(expectedNextQuestion)) {
+          // Successfully moved to next question
+          nextQuestionFound = true;
+        } else if (heading?.includes(`Question ${i} of 8`)) {
+          // Still on same question - might be an adaptive follow-up
+          const textarea2 = page.locator("textarea");
+          if (await textarea2.isVisible()) {
+            // Submit follow-up
+            await textarea2.fill(answer);
+            const submitButton2 = page.locator('button:has-text("Submit Answer")');
+            if (await submitButton2.isEnabled()) {
+              await submitButton2.click();
             }
+            retries++;
           } else {
             break;
           }
+        } else if (i < 8) {
+          // Not on expected question and not on same question - something unexpected
+          break;
+        } else {
+          // Last question: if we're not seeing "Question 8 of 8" anymore, assume we moved to results
+          nextQuestionFound = true;
         }
+      }
 
+      // Verify we moved to next question (or results for last question)
+      if (i < 8) {
         await expect(page.locator("h2")).toContainText(`Question ${i + 1} of 8`, {
           timeout: 10000,
         });
