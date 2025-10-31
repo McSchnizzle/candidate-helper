@@ -23,9 +23,9 @@ test.describe("Guest Practice Session Flow", () => {
     // 4. Configure session (8 questions, text-only)
     await page.selectOption("#question-count", "8");
 
-    // Enable Low-Anxiety Mode to disable adaptive follow-up questions and test core question progression
-    await page.click("#low-anxiety-toggle");
-    await expect(page.locator("#low-anxiety-toggle")).toBeChecked();
+    // Verify Low-Anxiety Mode toggle is present (but don't enable it for this test)
+    // This test validates the full 8-question flow with adaptive follow-ups
+    await expect(page.locator('label:has-text("Low-Anxiety Mode")')).toBeVisible();
 
     // 5. Start practice session
     await page.click("text=Start Practice");
@@ -44,9 +44,9 @@ test.describe("Guest Practice Session Flow", () => {
     await expect(page.locator("text=Action: Explain what you did")).toBeVisible();
     await expect(page.locator("text=Result: Share the outcome")).toBeVisible();
 
-    // 9. Answer all 8 questions
+    // 9. Answer all 8 questions (handling possible adaptive follow-ups)
     for (let i = 1; i <= 8; i++) {
-      // Verify we're on the correct question
+      // Verify we're on the correct question (or a follow-up for it)
       await expect(page.locator("h2")).toContainText(`Question ${i} of 8`);
 
       // Fill in the answer
@@ -66,8 +66,34 @@ test.describe("Guest Practice Session Flow", () => {
       await submitButton.click();
 
       // If not last question, verify we moved to next question
+      // Note: may get a follow-up with same question number; if so, submit that too
       if (i < 8) {
-        await expect(page.locator("h2")).toContainText(`Question ${i + 1} of 8`, {
+        const currentQuestionNum = i + 1;
+        const maxAttempts = 3;
+        let attempts = 0;
+
+        while (attempts < maxAttempts) {
+          const heading = await page.locator("h2").textContent();
+          if (heading?.includes(`Question ${currentQuestionNum} of 8`)) {
+            break; // Got the expected next question
+          } else if (heading?.includes(`Question ${i} of 8`)) {
+            // Still on the same question - it's a follow-up, submit it
+            const textarea2 = page.locator("textarea");
+            if (await textarea2.isVisible()) {
+              await textarea2.fill(answer);
+              const submitButton2 = page.locator('button:has-text("Submit Answer")');
+              await submitButton2.click();
+              attempts++;
+              await page.waitForTimeout(500);
+            } else {
+              break;
+            }
+          } else {
+            break;
+          }
+        }
+
+        await expect(page.locator("h2")).toContainText(`Question ${currentQuestionNum} of 8`, {
           timeout: 10000,
         });
       }
