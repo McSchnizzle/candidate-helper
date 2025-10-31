@@ -12,11 +12,12 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
-            <Button asChild variant="ghost" className="text-xl font-bold text-gray-900 px-0 h-auto">
-              <Link href="/" className="flex items-center">
-                Cindy from Cinder
-              </Link>
-            </Button>
+            <Link
+              href="/"
+              className="flex items-center text-xl font-bold text-gray-900 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 rounded-md"
+            >
+              Cindy from Cinder
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
