@@ -12,7 +12,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
-            <Button asChild variant="link" className="text-xl font-bold px-0 hover:no-underline">
+            <Button asChild variant="ghost" className="text-xl font-bold text-gray-900 px-0 h-auto">
               <Link href="/" className="flex items-center">
                 Cindy from Cinder
               </Link>
