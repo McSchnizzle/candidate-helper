@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { Download, Edit2, Loader2 } from "lucide-react";
+import { trackEvent } from "@/lib/utils/track-event";
 import type { ResumeData, ResumeStep } from "@/lib/types/resume-builder";
 
 interface ResumePreviewProps {
@@ -32,6 +33,7 @@ export function ResumePreview({ resumeData, onBack, onEdit }: ResumePreviewProps
       }
 
       const { redirectTo } = await response.json();
+      trackEvent("resume_used_for_practice" as any);
       window.location.href = redirectTo;
     } catch (error) {
       console.error("Prepare practice error:", error);
@@ -59,6 +61,7 @@ export function ResumePreview({ resumeData, onBack, onEdit }: ResumePreviewProps
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      trackEvent("resume_exported" as any, { format });
     } catch (error) {
       console.error("Export error:", error);
       alert(`Failed to export ${format.toUpperCase()}. Please try again.`);

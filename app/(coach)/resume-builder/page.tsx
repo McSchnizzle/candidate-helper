@@ -15,6 +15,7 @@ import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { LinkedInImportModal } from "@/components/resume-builder/LinkedInImportModal";
 import { Download } from "lucide-react";
 import { saveLocalDraft, loadLocalDraft, migrateLocalDraftToServer } from "@/lib/utils/resume-storage";
+import { trackEvent } from "@/lib/utils/track-event";
 import type { ResumeStep, ResumeData } from "@/lib/types/resume-builder";
 
 const STEP_ORDER: ResumeStep[] = ["basic_info", "work_history", "education", "summary", "review"];
@@ -42,6 +43,7 @@ export default function ResumeBuilderPage() {
   // Load draft on mount
   useEffect(() => {
     loadDraft();
+    trackEvent("resume_builder_started" as any);
   }, []);
 
   async function loadDraft() {
@@ -122,6 +124,7 @@ export default function ResumeBuilderPage() {
   function handleLinkedInImport(data: Partial<ResumeData>) {
     setResumeData({ ...resumeData, ...data });
     saveDraft();
+    trackEvent("resume_linkedin_imported" as any);
   }
 
   function handleStepComplete(stepData: Partial<ResumeData>) {
@@ -131,6 +134,9 @@ export default function ResumeBuilderPage() {
     if (!completedSteps.includes(currentStep)) {
       setCompletedSteps([...completedSteps, currentStep]);
     }
+
+    // Track step completion
+    trackEvent("resume_builder_step_completed" as any, { step_name: currentStep });
 
     // Move to next step
     const currentIndex = STEP_ORDER.indexOf(currentStep);

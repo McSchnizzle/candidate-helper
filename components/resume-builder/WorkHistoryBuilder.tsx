@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { Plus, Trash2, Loader2, Sparkles } from "lucide-react";
+import { trackEvent } from "@/lib/utils/track-event";
 import type { WorkExperience } from "@/lib/types/resume-builder";
 
 interface WorkHistoryBuilderProps {
@@ -64,6 +65,7 @@ export function WorkHistoryBuilder({ initialData, onComplete, onBack }: WorkHist
 
       const result = await response.json();
       setEnhancementResult(result);
+      trackEvent("content_enhancement_requested" as any);
     } catch (error) {
       console.error("Enhancement error:", error);
       alert("Failed to enhance content. Please try again.");
@@ -78,6 +80,7 @@ export function WorkHistoryBuilder({ initialData, onComplete, onBack }: WorkHist
       enhanced_bullets: [...(currentJob.enhanced_bullets || []), suggestion],
     });
     setEnhancementResult(null);
+    trackEvent("ai_suggestion_accepted" as any);
   }
 
   function handleAddJob() {
