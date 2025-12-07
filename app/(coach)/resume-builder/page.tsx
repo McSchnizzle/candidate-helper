@@ -14,6 +14,7 @@ import { SummaryGenerator } from "@/components/resume-builder/SummaryGenerator";
 import { ResumePreview } from "@/components/resume-builder/ResumePreview";
 import { LinkedInImportModal } from "@/components/resume-builder/LinkedInImportModal";
 import { Download } from "lucide-react";
+import { saveLocalDraft, loadLocalDraft, migrateLocalDraftToServer } from "@/lib/utils/resume-storage";
 import type { ResumeStep, ResumeData } from "@/lib/types/resume-builder";
 
 const STEP_ORDER: ResumeStep[] = ["basic_info", "work_history", "education", "summary", "review"];
@@ -24,6 +25,8 @@ export default function ResumeBuilderPage() {
   const [resumeData, setResumeData] = useState<ResumeData>({});
   const [isSaving, setIsSaving] = useState(false);
   const [showLinkedInModal, setShowLinkedInModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [showSignUpBanner, setShowSignUpBanner] = useState(false);
 
   // Auto-save draft every 30 seconds
   useEffect(() => {
@@ -34,7 +37,7 @@ export default function ResumeBuilderPage() {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [resumeData]);
+  }, [resumeData, isAuthenticated]);
 
   // Load draft on mount
   useEffect(() => {
@@ -43,8 +46,25 @@ export default function ResumeBuilderPage() {
 
   async function loadDraft() {
     try {
+      // Try to load from server first
       const response = await fetch("/api/resume-builder/draft");
-      if (response.ok) {
+
+      if (response.status === 401) {
+        // User is not authenticated, load from localStorage
+        setIsAuthenticated(false);
+        const localDraft = loadLocalDraft();
+        if (localDraft) {
+          setResumeData(localDraft.data || {});
+          if (localDraft.step_completed) {
+            setCurrentStep(localDraft.step_completed);
+            const stepIndex = STEP_ORDER.indexOf(localDraft.step_completed);
+            setCompletedSteps(STEP_ORDER.slice(0, stepIndex));
+          }
+        }
+        setShowSignUpBanner(true);
+      } else if (response.ok) {
+        // User is authenticated
+        setIsAuthenticated(true);
         const { draft } = await response.json();
         if (draft) {
           setResumeData(draft.data || {});
@@ -54,25 +74,46 @@ export default function ResumeBuilderPage() {
             setCompletedSteps(STEP_ORDER.slice(0, stepIndex));
           }
         }
+
+        // Try to migrate localStorage draft if exists
+        await migrateLocalDraftToServer();
       }
     } catch (error) {
       console.error("Failed to load draft:", error);
+      // Fallback to localStorage
+      setIsAuthenticated(false);
+      const localDraft = loadLocalDraft();
+      if (localDraft) {
+        setResumeData(localDraft.data || {});
+        if (localDraft.step_completed) {
+          setCurrentStep(localDraft.step_completed);
+        }
+      }
     }
   }
 
   async function saveDraft() {
     try {
       setIsSaving(true);
-      await fetch("/api/resume-builder/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          step_completed: currentStep,
-          data: resumeData,
-        }),
-      });
+
+      if (isAuthenticated) {
+        // Save to server
+        await fetch("/api/resume-builder/draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            step_completed: currentStep,
+            data: resumeData,
+          }),
+        });
+      } else {
+        // Save to localStorage
+        saveLocalDraft(resumeData, currentStep);
+      }
     } catch (error) {
       console.error("Failed to save draft:", error);
+      // Fallback to localStorage
+      saveLocalDraft(resumeData, currentStep);
     } finally {
       setIsSaving(false);
     }
@@ -110,6 +151,34 @@ export default function ResumeBuilderPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Sign-up Banner for Guest Users */}
+        {showSignUpBanner && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-blue-900">
+                Sign up to save your resume in the cloud
+              </p>
+              <p className="text-sm text-blue-700 mt-1">
+                Your resume is currently saved in your browser. Create an account to access it from any device.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <a
+                href="/login"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 whitespace-nowrap"
+              >
+                Sign Up
+              </a>
+              <button
+                onClick={() => setShowSignUpBanner(false)}
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-start">
