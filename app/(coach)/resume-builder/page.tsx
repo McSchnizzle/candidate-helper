@@ -12,6 +12,8 @@ import { WorkHistoryBuilder } from "@/components/resume-builder/WorkHistoryBuild
 import { EducationSkillsForm } from "@/components/resume-builder/EducationSkillsForm";
 import { SummaryGenerator } from "@/components/resume-builder/SummaryGenerator";
 import { ResumePreview } from "@/components/resume-builder/ResumePreview";
+import { LinkedInImportModal } from "@/components/resume-builder/LinkedInImportModal";
+import { Download } from "lucide-react";
 import type { ResumeStep, ResumeData } from "@/lib/types/resume-builder";
 
 const STEP_ORDER: ResumeStep[] = ["basic_info", "work_history", "education", "summary", "review"];
@@ -21,6 +23,7 @@ export default function ResumeBuilderPage() {
   const [completedSteps, setCompletedSteps] = useState<ResumeStep[]>([]);
   const [resumeData, setResumeData] = useState<ResumeData>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [showLinkedInModal, setShowLinkedInModal] = useState(false);
 
   // Auto-save draft every 30 seconds
   useEffect(() => {
@@ -75,6 +78,11 @@ export default function ResumeBuilderPage() {
     }
   }
 
+  function handleLinkedInImport(data: Partial<ResumeData>) {
+    setResumeData({ ...resumeData, ...data });
+    saveDraft();
+  }
+
   function handleStepComplete(stepData: Partial<ResumeData>) {
     const updatedData = { ...resumeData, ...stepData };
     setResumeData(updatedData);
@@ -104,13 +112,26 @@ export default function ResumeBuilderPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Build Your Resume</h1>
-          <p className="mt-2 text-gray-600">
-            Let's create a professional resume together. I'll guide you through each step.
-          </p>
-          {isSaving && (
-            <p className="mt-2 text-sm text-blue-600">Saving draft...</p>
-          )}
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Build Your Resume</h1>
+              <p className="mt-2 text-gray-600">
+                Let's create a professional resume together. I'll guide you through each step.
+              </p>
+              {isSaving && (
+                <p className="mt-2 text-sm text-blue-600">Saving draft...</p>
+              )}
+            </div>
+            {currentStep === "basic_info" && (
+              <button
+                onClick={() => setShowLinkedInModal(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Import from LinkedIn
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Stepper */}
@@ -164,6 +185,13 @@ export default function ResumeBuilderPage() {
             />
           )}
         </div>
+
+        {/* LinkedIn Import Modal */}
+        <LinkedInImportModal
+          isOpen={showLinkedInModal}
+          onClose={() => setShowLinkedInModal(false)}
+          onImport={handleLinkedInImport}
+        />
       </div>
     </div>
   );
