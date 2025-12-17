@@ -92,7 +92,7 @@ app/
     ├── uploads/        # Resume (virus scan + PII detection), JD
     ├── jobs/           # Match scores, daily digest (cron)
     ├── admin/          # Dashboards, analytics, recruiter transcript access
-    └── cron/           # Vercel cron jobs (curate-jobs, send-digests, reset-audio-mode)
+    └── cron/           # Cron job endpoints (curate-jobs, send-digests, reset-audio-mode)
 ```
 
 ### Data Flow
@@ -186,30 +186,42 @@ app/
 npm install
 
 # Start Next.js dev server
-npm run dev  # http://localhost:3000
+npm run dev  # http://localhost:3222
 ```
 
 For database schema changes, apply migrations directly to the hosted Supabase instance.
 
-### Production Deployment
+### Production Deployment (Docker)
 
-For production, Next.js requires a build step:
+This project is self-hosted using Docker. Production runs on port **3333**.
 
 ```bash
-# Build for production
-npm run build
+# Build and start production container
+docker compose up -d --build
 
-# Start production server
-npm run start  # http://localhost:3333
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+
+# Rebuild after code changes
+docker compose up -d --build
 ```
 
-**Deployment options:**
+**Container details:**
 
-- **Vercel (recommended)**: Automatic builds on push, handles `build` + `start` automatically
-- **Docker**: Can containerize with `next build` + `next start` in Dockerfile
-- **Self-hosted**: Run `npm run build && npm run start` on any Node.js server
+- Image: Multi-stage build with Node 20 Alpine
+- Port: 3333 (mapped from container to host)
+- Restart: Automatic unless stopped
+- Health check: Polls `/api/health` every 30s
 
-The project is configured for Vercel deployment (see `vercel.json` if present, or auto-detected by Vercel).
+**Manual build (without Docker):**
+
+```bash
+npm run build
+npm run start  # http://localhost:3333
+```
 
 ### Testing
 
@@ -250,7 +262,7 @@ npm run db:types
 # File: specs/001-ai-interview-coach/contracts/rest-api.yaml
 
 # Test endpoints with curl (examples in quickstart.md)
-curl -X POST http://localhost:3000/api/sessions \
+curl -X POST http://localhost:3222/api/sessions \
   -H "Content-Type: application/json" \
   -d '{"mode": "text", "questionCount": 8}'
 ```
@@ -327,7 +339,7 @@ CLAMAV_URL=
 MONTHLY_COST_CAP_USD=300
 COST_ALERT_THRESHOLD_USD=285
 
-# Vercel Cron
+# Cron Jobs (authenticate scheduled task requests)
 CRON_SECRET=
 
 # reCAPTCHA
@@ -372,7 +384,7 @@ Monitor these SLOs in production:
 
 If targets missed, investigate:
 
-- Vercel Edge Functions for OpenAI routes (reduce cold starts)
+- Keep container running (Docker restart policy handles this)
 - Streaming responses (don't buffer entire response)
 - React.memo on heavy components (AudioRecorder, CoachingFeedback)
 - Suspense boundaries for data fetching
@@ -381,18 +393,19 @@ If targets missed, investigate:
 
 Before deploying to production:
 
-1. Environment variables set in Vercel
-2. Supabase project created (not local)
-3. ClamAV service deployed on Railway
-4. Domain configured: teamcinder.com/coach
-5. SPF/DKIM configured for AI-Cindy@teamcinder.com
-6. Vercel cron jobs configured (send-digests at 5pm PT, curate-jobs at noon PT, reset-audio-mode on 1st of month)
-7. Cost tracking dashboard accessible to admins
-8. Terms of Service and Privacy Policy pages live
-9. WCAG 2.2 AA compliance validated (axe-core + manual testing)
-10. reCAPTCHA keys configured
+1. Environment variables set in `.env` file
+2. Docker and Docker Compose installed
+3. Supabase project configured (hosted at jbgbgiehjvviuvirkfcg.supabase.co)
+4. ClamAV service deployed on Railway
+5. Domain configured: teamcinder.com/coach (reverse proxy to localhost:3333)
+6. SPF/DKIM configured for AI-Cindy@teamcinder.com
+7. Cron jobs configured via system cron (send-digests at 5pm PT, curate-jobs at noon PT, reset-audio-mode on 1st of month)
+8. Cost tracking dashboard accessible to admins
+9. Terms of Service and Privacy Policy pages live
+10. WCAG 2.2 AA compliance validated (axe-core + manual testing)
+11. reCAPTCHA keys configured
 
 ---
 
-**Last Updated**: 2025-10-26
-**Active Technologies**: TypeScript 5.x, Next.js 14 (App Router), React 18, Supabase, OpenAI SDK, Microsoft Graph SDK, React Hook Form, Zod, TailwindCSS, Radix UI, pdf-lib, ClamAV
+**Last Updated**: 2025-12-17
+**Active Technologies**: TypeScript 5.x, Next.js 14 (App Router), React 18, Supabase, OpenAI SDK, Microsoft Graph SDK, React Hook Form, Zod, TailwindCSS, Radix UI, pdf-lib, ClamAV, Docker
