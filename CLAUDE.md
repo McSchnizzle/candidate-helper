@@ -177,16 +177,28 @@ app/
 
 ## Development Commands
 
-### Local Setup
+### Local Development (Docker)
 
-**NOTE**: This project uses **hosted Supabase** (not local). The database is at `jbgbgiehjvviuvirkfcg.supabase.co`. You do NOT need to run `supabase start` or have Docker installed for local development.
+**NOTE**: This project uses **hosted Supabase** (not local). The database is at `jbgbgiehjvviuvirkfcg.supabase.co`.
 
 ```bash
-# Install dependencies
-npm install
+# Start dev server in Docker (port 3222)
+docker compose -f docker-compose.dev.yml up -d
 
-# Start Next.js dev server
-npm run dev  # http://localhost:3222
+# View logs
+docker compose -f docker-compose.dev.yml logs -f
+
+# Stop
+docker compose -f docker-compose.dev.yml down
+```
+
+Dev server runs at **http://localhost:3222** with hot reload enabled.
+
+**Without Docker** (if needed):
+
+```bash
+npm install
+npm run dev
 ```
 
 For database schema changes, apply migrations directly to the hosted Supabase instance.
